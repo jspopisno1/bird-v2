@@ -1,0 +1,12 @@
+Path: .
+Working Copy Root Path: /Users/baidu/development/dulife/dulife-fe-main/dest
+URL: https://svn.baidu.com/erp/trunk/neiwang-dev/projects-webapps/dulife-parent/dulife-parent/dulife-api/src/main/webapp/dulife
+Repository Root: https://svn.baidu.com/erp
+Repository UUID: 3260905e-18b2-4292-b018-2fb6a64a9a86
+Revision: 147543
+Node Kind: directory
+Schedule: normal
+Last Changed Author: zhengliangliang
+Last Changed Rev: 147543
+Last Changed Date: 2016-04-29 12:03:31 +0800 (五, 29  4 2016)
+

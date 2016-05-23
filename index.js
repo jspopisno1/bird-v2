@@ -1,0 +1,1 @@
+module.exports = require('./project/locals/lib/index.js')
