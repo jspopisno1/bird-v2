@@ -40,6 +40,7 @@ module.exports = function start(config) {
   auth(config, jar).then(function () {
 
     if (config.middleware) {
+      console.log('or @debug, am i here?', config)
       function compose(middleware) {
         return function (req, res, next) {
           connect.apply(null, middleware.concat(next.bind(null, null))).call(null, req, res)
