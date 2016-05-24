@@ -51,7 +51,7 @@ module.exports = {
     },
 
     // 需要一个完整路径
-    mockRoot: __dirname,
+    mockRoot: false,
 
     // 默认的文件夹入口, 即如果访问的是文件夹, 且本设置为非空, 则尝试返回该文件夹下的同名文件
     // 默认为 index.html
@@ -63,13 +63,15 @@ module.exports = {
         // 两种类型: 'mock' 和 'static'
 
         // mock: 从mockRoot开始计算
-        {test: '/api/some-data.json', mock: 'some-folder/some-data'},
+        {test: '/api/some-data.json', mock: '/hi'},
+        {test: '/api/some-other-data.json', mock: 'mock/hi'},
 
         // 如果没有前缀, 则走 后端 server, 如果没有指定 replace, 则不进行replace
         {test: '(/api/)to-be-replace/(my-data.json)', replace: '$1$2'},
-        {test: '/api/'},
+        {test: '/api/'}, 
 
         // static: 是匹配至静态资源
+        {test: '/root/', static: '/'},
         {test: '/', static: '/'}
     ],
 
