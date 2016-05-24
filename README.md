@@ -1,5 +1,23 @@
 # This is bird with auth
 
+## Development
+
+当前的开发方向如下:
+
+- 提高bird配置的可读性与有效性 (重构config的结构)
+- 实现配置文件的动态加载 (当前需要重新启动服务器)
+- fix 一些常见的bug
+    - 如, debug: false的时候, 会影响所有其他正常的console.log输出
+    - 没有指定username, 则静默式退出
+    - 没有内网环境下, cheerio解析出错
+- 加入多一些合理的错误信息, 以方便用户调试和调整config
+- 引入 matriks 项目结构
+
+[项目开发任务列表](./doc/tasks.md)
+
+
+**注意: 以下的README内容可能会短时间内失效, 请随时关注项目的开发**
+
 ## usage
 
 ### global
