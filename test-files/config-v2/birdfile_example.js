@@ -53,8 +53,12 @@ module.exports = {
     // 需要一个完整路径
     mockRoot: __dirname,
 
-    // routers 使用顺序单次匹配, 如果某一次匹配成功, 则不做下一次fallback匹配, 用于简单化整个数据转接的流程, 避免路由过于复杂, 调试繁琐
-    routers: [
+    // 默认的文件夹入口, 即如果访问的是文件夹, 且本设置为非空, 则尝试返回该文件夹下的同名文件
+    // 默认为 index.html
+    defaultIndex: 'index.html',
+
+    // routes 使用顺序单次匹配, 如果某一次匹配成功, 则不做下一次fallback匹配, 用于简单化整个数据转接的流程, 避免路由过于复杂, 调试繁琐
+    routes: [
         // 匹配从root开始的url, 允许正则, 默认都是从起始开始匹配, 例如, '/api/' => /^\/api\//
         // 两种类型: 'mock' 和 'static'
 
@@ -69,15 +73,8 @@ module.exports = {
         {test: '/', static: '/'}
     ],
 
-    // middleware 模式下, 不用启动一个全新的 server, 而是允许返回 function(req, res, next) { ... } 的给express用的handler
-    middlewares: {
-        middlewareA: [
-            // ... 参照routers
-            // 使用以下获取得到 middleware
-            // var birdInstance = bird(config)
-            // middlewareA = birdInstance.middlewares.middlewareA
-        ]
-    },
+    // middleware 的话, bird会return一个中间件函数, 默认为false
+    middleware: false,
 
     // 待定, 如果有开发出webUI, 可以考虑允许用户指定webUI的context
     birdWebUI: '/biiiirrrrd/',

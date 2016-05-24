@@ -26,11 +26,11 @@ program.on('--help', function () {
 
 program.parse(process.argv);
 
-var config;
-try {
-    config = require(path.join(process.cwd(), configFileName))
-} catch (e) {
-    console.error('ERROR: please specify the correct bird file name')
-}
+// var config;
+// try {
+//     config = require(path.join(process.cwd(), configFileName))
+// } catch (e) {
+//     console.error('ERROR: please specify the correct bird file name')
+// }
 
-bird(config)
+bird(path.join(process.cwd(), configFileName))

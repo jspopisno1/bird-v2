@@ -1,21 +1,28 @@
 var express = require('express')
 var fs = require('fs')
-var url = require('url')
 var path = require('path')
 var request = require('request')
 var colors = require('colors');
 var http = require('http-debug').http;
 var https = require('http-debug').https;
 
-var utils = require('common/utils')
+var utils = require('bird-common/utils')
+var configParser = require('bird-common/config-parser')
+
+var proxy = require('bird-lib/proxy')
+
 
 /**
  * bird启动入口
  *
- * @param  {Object} config bird-configuration
+ * @param  {Object} config bird-configuration file path
+ *  我们需要改成一个自动检测的能力
+ *
  * @return {undefined}
  */
-module.exports = function start(config) {
+module.exports = function start(configPath) {
+
+    var config = configParser.parse(configPath);
 
     // 暂不考虑 array 的设置??
     // if (config && Array.isArray(config)) {
@@ -48,108 +55,73 @@ module.exports = function start(config) {
         return;
     }
 
+    /**
+     * 需要对utils进行debug设置
+     */
     if (!config.debug /* silence when not debugging */) {
+
         // global.console.log = function () {
         // };
     }
 
-    var ROUTER = config.router;
-    var COOKIE = config.cookie;
-    // var AUTO_INDEX = config.autoIndex ? config.autoIndex.split(/\x20+/) : ['index.html']
-    //保证路径完整
-    var TARGET_SERVER = config.server.slice('-1') === '/' ? config.server : config.server + '/';
-    var jar = request.jar();  // jar to store cookies
-    config = configResolver(config, jar);
-    var auth = config.auth;
-    auth(config, jar).then(function () {
+    /**
+     * 集中处理所有请求
+     */
+    var app = new express()
+    
+    app.all('*', proxy(config))
 
-        if (config.middleware) {
-            console.log('or @debug, am i here?', config)
-            function compose(middleware) {
-                return function (req, res, next) {
-                    connect.apply(null, middleware.concat(next.bind(null, null))).call(null, req, res)
-                }
-            }
+    // go!
+    app.listen(config.bird_port)
+    console.info('BIRD'.rainbow, '============', config.name, 'RUNNING at', 'http://localhost:' + config.bird_port, '===============', 'BIRD'.rainbow);
 
-            // http://stackoverflow.com/questions/20274483/how-do-i-combine-connect-middleware-into-one-middleware
-            return compose([proxy, require('./lib/mock')(config), require('./lib/change-user')(config), require('./lib/logout')(config)]);
-        } else {
-            console.log('@debug, am i here?')
-            // setup bird app
-            var app = new express()
-            app.all('*', require('./lib/mock')(config))
-            app.all('*', require('./lib/static')(config))
-            app.all('*', require('./lib/change-user')(config))
-            app.all('*', require('./lib/logout')(config))
-            app.all('*', proxy)
-            // go!
-            app.listen(config.bird_port)
-            console.info('BIRD'.rainbow, '============', config.name, 'RUNNING at', 'http://localhost:' + config.bird_port, '===============', 'BIRD'.rainbow);
-        }
-    }).catch(function (e) {
-        console.log(e)
-    })
+    // var ROUTER = config.router;
+    // var COOKIE = config.cookie;
+    // // var AUTO_INDEX = config.autoIndex ? config.autoIndex.split(/\x20+/) : ['index.html']
+    // //保证路径完整
+    // var TARGET_SERVER = config.server.slice('-1') === '/' ? config.server : config.server + '/';
+    // var jar = request.jar();  // jar to store cookies
+    // config = configResolver(config, jar);
+    // var auth = config.auth;
+    // auth(config, jar).then(function () {
+    //
+    //     if (config.middleware) {
+    //         console.log('or @debug, am i here?', config)
+    //         function compose(middleware) {
+    //             return function (req, res, next) {
+    //                 connect.apply(null, middleware.concat(next.bind(null, null))).call(null, req, res)
+    //             }
+    //         }
+    //
+    //         // http://stackoverflow.com/questions/20274483/how-do-i-combine-connect-middleware-into-one-middleware
+    //         return compose([proxy, require('./lib/mock')(config), require('./lib/change-user')(config), require('./lib/logout')(config)]);
+    //     } else {
+    //         console.log('@debug, am i here?')
+    //         // setup bird app
+    //         var app = new express()
+    //         app.all('*', require('./lib/mock')(config))
+    //         app.all('*', require('./lib/static')(config))
+    //         app.all('*', require('./lib/change-user')(config))
+    //         app.all('*', require('./lib/logout')(config))
+    //         app.all('*', proxy)
+    //
+    //         // go!
+    //         app.listen(config.bird_port)
+    //         console.info('BIRD'.rainbow, '============', config.name, 'RUNNING at', 'http://localhost:' + config.bird_port, '===============', 'BIRD'.rainbow);
+    //     }
+    // }).catch(function (e) {
+    //     console.log(e)
+    // })
+    //
+    // function configResolver(originConfig, jar) {
+    //     var config = Object.assign({}, originConfig);
+    //     config.auth = require('./auths/' + (originConfig.authType || originConfig.auth_standalone || 'uuap'));
+    //     config.birdPort = originConfig.bird_port;
+    //     config.jar = jar;
+    //     return config;
+    // }
 
-    function configResolver(originConfig, jar) {
-        var config = Object.assign({}, originConfig);
-        config.auth = require('./auths/' + (originConfig.authType || originConfig.auth_standalone || 'uuap'));
-        config.birdPort = originConfig.bird_port;
-        config.jar = jar;
-        return config;
-    }
 
-    function proxy(req, res, next) {
-        var urlParsed = url.parse(req.url);
-        var filePath = resolveFilePath(config.staticFileRootDirPath, urlParsed.pathname);
-        if (true) {
-            // set up forward request
-            var headers = req.headers;
-            headers.cookie = COOKIE || redeemCookieFromJar(jar.getCookies(TARGET_SERVER));
-            // headers.host = config.host;
-            // console.info("headers.cookie", headers.cookie)
-            delete headers['x-requested-with'];
-            var requestPath = router(urlParsed.path, ROUTER);
-            // console.info('requestPath:', requestPath);
-            var urlOptions = {
-                host: url.parse(TARGET_SERVER).hostname,
-                port: url.parse(TARGET_SERVER).port,
-                path: requestPath,
-                method: req.method,
-                headers: headers,
-                rejectUnauthorized: false
-            };
-            console.log('headers', headers);
-            // proxy to target server
-            var forwardUrl = url.resolve(TARGET_SERVER, requestPath);
-            // log forwarding message
-            console.info('fowarding', filePath.red, 'to', forwardUrl.cyan);
-            var httpOrHttps = url.parse(TARGET_SERVER).protocol === 'http:' ? http : https;
-            var forwardRequest = httpOrHttps.request(urlOptions, function (response) {
-                // set headers to the headers in origin request
-                res.writeHead(response.statusCode, response.headers);
-                response.on('data', function (chunk) {
-                    // body += chunk;
-                    res.write(chunk);
-                });
-
-                response.on('end', function () {
-                    // console.info(body)
-                    res.end();
-                });
-            });
-            forwardRequest.on('error', function (e) {
-                console.error('problem with request: ' + e.message);
-            });
-
-            req.addListener('data', function (chunk) {
-                forwardRequest.write(chunk);
-            });
-
-            req.addListener('end', function () {
-                forwardRequest.end();
-            });
-        }
-    }
 };
 
 /**
