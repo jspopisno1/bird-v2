@@ -46,15 +46,6 @@ module.exports = function start(configPath) {
     }
 
     /**
-     * 需要对utils进行debug设置
-     */
-    if (!config.debug /* silence when not debugging */) {
-
-        // global.console.log = function () {
-        // };
-    }
-
-    /**
      * 集中处理所有请求
      */
     var app = new express()
@@ -127,21 +118,6 @@ function resolveFilePath(staticFileRootDirPath, pathname) {
     return path.join(staticFileRootDirPath, pathname);
 }
 
-/**
- * get the normalized cookie from jar
- * @param  {Array} cookieArray
- * @return {String} cookie string used in headers
- */
-function redeemCookieFromJar(cookieArray) {
-    var result = '';
-    for (var i = 0; i < cookieArray.length; i++) {
-        result += cookieArray[i].key + '=' + cookieArray[i].value + ';';
-        if (i !== cookieArray.length - 1) {
-            result += ' ';
-        }
-    }
-    return result;
-}
 
 function router(url, router) {
     var path = '';
