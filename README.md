@@ -13,6 +13,13 @@
 - 加入多一些合理的错误信息, 以方便用户调试和调整config
 - 引入 matriks 项目结构
 
+## 重构后的主要思路
+
+- 关于config的自动更新
+  - 利用 setInterval 和 fs.stat 来动态检测 config 变化, 更新 js 引用对象 config
+  - 参见 @[  动态更新 config 对象  ]{t97zs_zd0tksdx_iom9u7yv}@
+- 
+
 [项目开发任务列表](./doc/tasks.md)
 
 

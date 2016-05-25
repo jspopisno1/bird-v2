@@ -22,14 +22,6 @@ module.exports = function start(configPath) {
 
     var config = configParser.parse(configPath);
 
-    // 暂不考虑 array 的设置??
-    // if (config && Array.isArray(config)) {
-    //   for (var i = 0; i < config.length; i++) {
-    //     start(config[i])
-    //   }
-    //   return;
-    // }
-
     // config 检测过程
     if (!config) {
         utils.log('error', 'Config should not be empty, please check your config file.')

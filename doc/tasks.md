@@ -2,16 +2,18 @@
 
 ## proposed config
 
+- 参见 @[  Bird config example  ]{t97zs_2osppcsk_iom9suor}@
 - [x] auth plugin specified
 - [x] middle ware setting
 - [x] router setting
-- [] 暂时取消 array 的设定??
+- [x] 暂时取消 array 的设定??
     - 推荐 bird 内置于项目中, 作为代码的一部分跟着项目走
     
     
 ## 实现配置文件的动态加载 (当前需要重新启动服务器)
 
-- [] 当检测到 bird config 有更新, 不用重启server地刷新config
+- [x] 当检测到 bird config 有更新, 不用重启server地刷新config
+    - 参见 @[  动态更新 config 对象  ]{t97zs_zd0tksdx_iom9u7yv}@
 
 ## fix 一些常见的bug
 

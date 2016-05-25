@@ -1,3 +1,4 @@
+// <<[ Bird config example ]{t97zs_2osppcsk_iom9suor}>>
 var npath = require('path')
 
 module.exports = {
@@ -5,7 +6,8 @@ module.exports = {
     name: 'ar',
 
     // bird 启动的 port, 如果设置成 middle ware的话, 将失效
-    bird_port: 7676,
+    // 注意: 这个设置无法进行动态更改
+    bird_port: 7678,
 
     // 默认的 静态资源 root
     staticFileRootDirPath: npath.resolve(__dirname),
@@ -52,11 +54,13 @@ module.exports = {
             retry: false
         },
         serverB: {
-            server: 'https://www.baidu.com',
+            //server: 'https://www.baidu.com',
+            server: 'http://demo.neisou.baidu.com/',
+            //server: 'https://www.teambition.com',
 
             // 如果没有给定任何的auth plugin, 则用默认的 default,
             // default 主要就是把cookie写到头部去
-            cookie: 'JSESSIONID=asdfiawefi309rifwefhasdf'
+            cookie: 'JSESSIONID=D0D9B07C9B8466F49646DC73737618C0; BAIDUID=745B42F128DB18CCDF2432566C07C339:FG=1; PSTM=1456808621; BIDUPSID=C4E27A4805415C295BF3ADE23E32E682; MCITY=-131%3A; Hm_lvt_97a3ccc58f72810a014745c167a12ffc=1460969053,1461639564,1462355104; H_PS_PSSID=18881_19288_1468_20079_18559_15776_11485; JSESSIONID=762BC17EC6DE857A07ACEA593D65B018.jvm-sso-lt-app1'
         }
     },
 
