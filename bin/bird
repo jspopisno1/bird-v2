@@ -26,7 +26,6 @@ program.on('--help', function() {
 
 program.parse(process.argv);
 
-
 var config;
 try {
   config = require(path.join(process.cwd(), configFileName))

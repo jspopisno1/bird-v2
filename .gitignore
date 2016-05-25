@@ -1,5 +1,4 @@
-node_modules/
-.DS_store
+/tmp/
+/node_modules/
 .idea/
-demo/
-birdfile.js
+/_matriks_/seed/

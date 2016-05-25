@@ -1,0 +1,12 @@
+## 样例的svn-info.txt内容
+Path: .
+Working Copy Root Path: /Users/baidu/development/neisou/befe-neisou-main
+URL: https://svn.baidu.com/babel/trunk/neisou/neisouweb/src/main/webapp
+Repository Root: https://svn.baidu.com/babel
+Repository UUID: 24c59d20-e9cf-4d0f-932d-e6661467d87c
+Revision: 11549
+Node Kind: directory
+Schedule: normal
+Last Changed Author: mupeng01
+Last Changed Rev: 11549
+Last Changed Date: 2016-04-26 10:14:17 +0800 (二, 26  4 2016)

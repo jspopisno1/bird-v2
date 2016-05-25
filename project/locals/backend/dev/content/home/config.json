@@ -1,0 +1,51 @@
+{
+  "banners": [
+    {
+      "image": "banner1.png"
+    },
+    {
+      "image": "banner2.jpg"
+    },
+    {
+      "image": "banner3.jpg"
+    }
+  ],
+  "apps": [
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    },
+    {
+      "icon": "hello.png",
+      "bg": ""
+    }
+  ]
+}

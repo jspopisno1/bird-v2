@@ -1,0 +1,11 @@
+!node_modules/
+.idea
+/static
+npm-debug.log
+
+# 编译目标文件夹
+/dest/*
+
+# upload.py 提交svn代码使用的
+!/dest/upload.py
+!/dest/git-svn/
