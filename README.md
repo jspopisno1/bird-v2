@@ -16,9 +16,25 @@
 ## 重构后的主要思路
 
 - 关于config的自动更新
-  - 利用 setInterval 和 fs.stat 来动态检测 config 变化, 更新 js 引用对象 config
-  - 参见 @[  动态更新 config 对象  ]{t97zs_zd0tksdx_iom9u7yv}@
-- 
+    - 利用 setInterval 和 fs.stat 来动态检测 config 变化, 更新 js 引用对象 config
+    - 参见 @[  动态更新 config 对象  ]{t97zs_zd0tksdx_iom9u7yv}@
+- 逻辑重构思路
+    - bird的两大核心:
+        - 设置好目标的后端 server, 并利用 httpClient 来进行接口转发
+            - 接口转发的逻辑:
+                - 1 得到 request 时, 获取其 pathname
+                - 2 将 pathname 提交给 routes 解析函数, 得到一个资源处理策略
+                - 3 根据资源处理策略来处理该 request
+                - 4 如果为接口转发, 首先做一些简单的配置, 生成一个转发的必要对象: urlOptions
+                - 5 通过 plugin (一般是用于解决用户身份验证, 得到cookie), 修改 urlOptions
+                    - 参见 @[  解析所用的 plugin, 并调用它  ]{t97zs_vd7sdnis_iomf0g31}@
+                - 6 将最终得到的 urlOptions 作为转发的参数, 发送 http 或 https 的请求到目标后端服务器
+                - 7 截取所有后端服务器的返回进行处理
+                - 8 如果后端返回是 3XX, 403 等特殊的跟身份验证相关的状态值, 需要考虑是否进行 plugin 的 retry
+                    - 参见 @[  特殊返回的处理, 如 3XX, 403  ]{t97zs_w0fege8q_iomeynf7}@ 
+                - 9 否则, 如果是其他的状态, 我们就全量的写到给前端的 reponse 里, 实现最终的接口转发
+        - 通过 routes (路由设置) 来判定资源的返回方式
+            - 目前有三种资源类别: mock (假数据), static (静态资源), forward (接口转发) 
 
 [项目开发任务列表](./doc/tasks.md)
 
