@@ -5,34 +5,32 @@ var bird = require('../index')
 var path = require('path')
 var configFileName = 'birdfile.js'
 program
-  .version('0.0.3')
-  .option('-c, --config', 'specify config file')
-  .action(function (name) {
-    if (!name) {
-      // console.log('config filename must not be empty')
-      return;
-    }
-    configFileName = name;
-  })
+    .version('0.0.3')
+    .option('-c, --config', 'specify config file')
+    .action(function (name) {
+        if (!name) {
+            // console.log('config filename must not be empty')
+            return;
+        }
+        configFileName = name;
+    })
 
-program.on('--help', function() {
-  console.log('  Examples:');
-  console.log('');
-  console.log('    $ bird --help');
-  console.log('    $ bird -h');
-  console.log('');
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log('');
+    console.log('    $ bird --help');
+    console.log('    $ bird -h');
+    console.log('');
 });
 
 
 program.parse(process.argv);
 
-var config;
-try {
-  config = require(path.join(process.cwd(), configFileName))
-} catch (e){
-  console.error('ERROR: please specify the correct bird file name')
-}
+// var config;
+// try {
+//     config = require(path.join(process.cwd(), configFileName))
+// } catch (e) {
+//     console.error('ERROR: please specify the correct bird file name')
+// }
 
-if (config) {
-  bird(config)
-}
+bird(path.join(process.cwd(), configFileName))
