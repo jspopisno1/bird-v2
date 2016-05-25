@@ -3,7 +3,7 @@ var npath = require('path')
 
 module.exports = {
     // 该 bird 实例的名称
-    name: 'ar',
+    name: 'AR项目',
 
     // bird 启动的 port, 如果设置成 middle ware的话, 将失效
     // 注意: 这个设置无法进行动态更改
@@ -13,7 +13,7 @@ module.exports = {
     staticFileRootDirPath: npath.resolve(__dirname),
 
     // 目标后端
-    useServer: 'serverB',
+    useServer: 'serverC',
 
     // 所有预设的 servers
     servers: {
@@ -61,6 +61,15 @@ module.exports = {
             // 如果没有给定任何的auth plugin, 则用默认的 default,
             // default 主要就是把cookie写到头部去
             cookie: 'JSESSIONID=D0D9B07C9B8466F49646DC73737618C0; BAIDUID=745B42F128DB18CCDF2432566C07C339:FG=1; PSTM=1456808621; BIDUPSID=C4E27A4805415C295BF3ADE23E32E682; MCITY=-131%3A; Hm_lvt_97a3ccc58f72810a014745c167a12ffc=1460969053,1461639564,1462355104; H_PS_PSSID=18881_19288_1468_20079_18559_15776_11485; JSESSIONID=762BC17EC6DE857A07ACEA593D65B018.jvm-sso-lt-app1'
+        },
+        serverC: {
+            server: 'https://www.baidu.com',
+            //server: 'http://demo.neisou.baidu.com/',
+            //server: 'https://www.teambition.com',
+
+            // 如果没有给定任何的auth plugin, 则用默认的 default,
+            // default 主要就是把cookie写到头部去
+            cookie: 'JSESSIONID=D0D9B07C9B8466F49646DC73737618C0; BAIDUID=745B42F128DB18CCDF2432566C07C339:FG=1; PSTM=1456808621; BIDUPSID=C4E27A4805415C295BF3ADE23E32E682; MCITY=-131%3A; Hm_lvt_97a3ccc58f72810a014745c167a12ffc=1460969053,1461639564,1462355104; H_PS_PSSID=18881_19288_1468_20079_18559_15776_11485; JSESSIONID=762BC17EC6DE857A07ACEA593D65B018.jvm-sso-lt-app1'
         }
     },
 
@@ -77,11 +86,15 @@ module.exports = {
         // 两种类型: 'mock' 和 'static'
 
         // mock: 从mockRoot开始计算
-        {test: '/api/some-data.json', mock: '/hi'},
+        /*
+            如果 mock 文件返回一个函数, 那么将运行这个函数, 并返回 mock data
+            函数原型: function(urlInfo, queryObject, postBody)
+         */
+        {test: '/api/some-data.json', mock: 'mock/hi2'},
         {test: '/api/some-other-data.json', mock: 'mock/hi'},
 
-        // 如果没有前缀, 则走 后端 server, 如果没有指定 replace, 则不进行replace
-        {test: '(/api/)to-be-replace/(my-data.json)', replace: '$1$2'},
+        // 如果没有指定 mock 或 static, 则理解为接口转发, 将走指定的后端 server, 如果没有指定 replace, 则不进行replace
+        {test: '(/api/)to/(data.json)', replace: '$1$2'},
         {test: '/api/'},
         {test: '/root', static: '/'},
         {test: '/'},
@@ -98,5 +111,12 @@ module.exports = {
     birdWebUI: '/biiiirrrrd/',
 
     // 是否打印出debug信息
-    debug: true
+    debug: true,
+
+    // @todo 给其他人看的 demo
+    // if send
+    ifSendDemo: false,
+    demos: {
+        '/my-context/login.html': '登录页面'
+    }
 };
