@@ -3,8 +3,6 @@ var fs = require('fs')
 var path = require('path')
 var request = require('request')
 var colors = require('colors');
-var http = require('http-debug').http;
-var https = require('http-debug').https;
 
 var utils = require('bird-common/utils')
 var configParser = require('bird-common/config-parser')
